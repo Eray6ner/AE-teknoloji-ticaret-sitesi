@@ -103,6 +103,7 @@
             }
         }
 
+        const BASE_URL = 'https://ae-teknoloji-ticaret-sitesi.onrender.com/api';
         // Favori ürünleri dinamik olarak çek ve göster
         async function loadFavorites() {
             const token = localStorage.getItem('token');
@@ -113,7 +114,7 @@
                 emptyMsg.style.display = 'block';
                 return;
             }
-            const res = await fetch('http://localhost:3001/api/favorites', {
+            const res = await fetch(`${BASE_URL}/favorites`, {
                 headers: { 'Authorization': 'Bearer ' + token }
             });
             const products = await res.json();
@@ -138,7 +139,7 @@
                 `;
                 // Favoriden çıkarma
                 col.querySelector('.remove-favorite').onclick = async () => {
-                    await fetch('http://localhost:3001/api/favorites/remove', {
+                    await fetch(`${BASE_URL}/favorites/remove`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',
@@ -150,7 +151,7 @@
                 };
                 // Sepete ekleme
                 col.querySelector('.add-to-cart').onclick = async () => {
-                    await fetch('http://localhost:3001/api/cart/add', {
+                    await fetch(`${BASE_URL}/cart/add`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
