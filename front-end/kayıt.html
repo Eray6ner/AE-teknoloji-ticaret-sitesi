@@ -114,7 +114,8 @@
         const name = RegForm.querySelector('input[type="text"]').value;
         const email = RegForm.querySelector('input[type="email"]').value;
         const password = RegForm.querySelector('input[type="password"]').value;
-        const res = await fetch('http://localhost:3001/api/auth/register', {
+        const BASE_URL = 'https://ae-teknoloji-ticaret-sitesi.onrender.com/api';
+        const res = await fetch(`${BASE_URL}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password })
@@ -128,8 +129,9 @@
         e.preventDefault();
         const emailOrUsername = LoginForm.querySelector('input[type="text"]').value;
         const password = LoginForm.querySelector('input[type="password"]').value;
+        const BASE_URL = 'https://ae-teknoloji-ticaret-sitesi.onrender.com/api';
         // Username veya email ile giriş denemesi (örnek: email olarak kabul ediyoruz)
-        const res = await fetch('http://localhost:3001/api/auth/login', {
+        const res = await fetch(`${BASE_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: emailOrUsername, password })
@@ -149,7 +151,8 @@
         e.preventDefault();
         const email = prompt('Şifrenizi sıfırlamak için e-posta adresinizi girin:');
         if (!email) return;
-        const res = await fetch('http://localhost:3001/api/auth/forgot-password', {
+        const BASE_URL = 'https://ae-teknoloji-ticaret-sitesi.onrender.com/api';
+        const res = await fetch(`${BASE_URL}/auth/forgot-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
