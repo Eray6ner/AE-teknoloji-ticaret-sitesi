@@ -47,6 +47,8 @@
         margin: 0 auto;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         transition: all 0.3s ease;
+        position: relative;
+        z-index: 10;
     }
     
     .search-bar-input {
@@ -58,6 +60,11 @@
         font-size: 14px;      /* Daha küçük font */
         color: #333;
         font-family: 'Poppins', sans-serif;
+        position: relative;
+        z-index: 11;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
     }
     
     .search-bar button {
@@ -410,6 +417,7 @@ h4{
                 width: 100%;
                 overflow: hidden;
                 transition: max-height 0.5s;
+                z-index: 5;
             }
             nav ul li{
                 display: block;
@@ -983,5 +991,213 @@ h4{
     .language-selector select {
         width: 100%;
         max-width: 200px;
+    }
+}
+
+.logout-button {
+  margin-left: 20px;
+  padding: 8px 24px;
+  background: #800080;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(128,0,128,0.08);
+  letter-spacing: 0.5px;
+}
+.logout-button:hover {
+  background: #a020f0;
+  box-shadow: 0 4px 16px rgba(128,0,128,0.15);
+}
+
+@media (max-width: 600px) {
+  .logout-button {
+    padding: 8px 12px;
+    font-size: 14px;
+    margin-left: 8px;
+  }
+}
+
+/* Mobil Sepet Optimizasyonu */
+@media (max-width: 768px) {
+    .cart-page {
+        margin: 20px auto;
+        padding: 0 10px;
+    }
+    
+    .cart-page table {
+        font-size: 12px;
+    }
+    
+    .cart-info {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .cart-info img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 10px;
+    }
+    
+    .cart-info p {
+        margin: 5px 0;
+        font-size: 14px;
+    }
+    
+    .quantity-controls {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .quantity-controls button {
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+    }
+    
+    .quantity-controls span {
+        font-size: 14px;
+    }
+    
+    .total-price {
+        margin-top: 20px;
+        align-items: center;
+    }
+    
+    .total-price table {
+        max-width: 100%;
+    }
+    
+    .checkout-button {
+        width: 100%;
+        max-width: 300px;
+        margin-top: 15px;
+    }
+}
+
+/* Çok küçük ekranlar için */
+@media (max-width: 480px) {
+    .cart-page table {
+        font-size: 11px;
+    }
+    
+    .cart-info img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .cart-info p {
+        font-size: 12px;
+    }
+    
+    .quantity-controls button {
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+    }
+    
+    .checkout-button {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
+/* Mobil Arama Optimizasyonu */
+@media (max-width: 768px) {
+    .search-bar {
+        max-width: 100%;
+        margin: 10px 0;
+        padding: 8px 15px;
+        z-index: 20;
+        position: relative;
+    }
+    
+    .search-bar-input {
+        font-size: 16px; /* iOS zoom'u önlemek için */
+        padding: 8px;
+        z-index: 21;
+        position: relative;
+        -webkit-touch-callout: none;
+        -webkit-user-select: text;
+        -khtml-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
+    }
+    
+    .search-bar button {
+        padding: 8px 20px;
+        font-size: 14px;
+        z-index: 21;
+        position: relative;
+    }
+    
+    .search-bar .material-symbols-outlined {
+        font-size: 18px;
+        margin-right: 6px;
+        pointer-events: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-bar {
+        padding: 6px 12px;
+        z-index: 20;
+        position: relative;
+        min-height: 44px; /* Touch target için minimum yükseklik */
+    }
+    
+    .search-bar-input {
+        font-size: 16px;
+        padding: 6px;
+        z-index: 21;
+        position: relative;
+        min-height: 32px; /* Touch target için minimum yükseklik */
+        -webkit-touch-callout: none;
+        -webkit-user-select: text;
+        -khtml-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
+    }
+    
+    .search-bar button {
+        padding: 6px 16px;
+        font-size: 13px;
+        z-index: 21;
+        position: relative;
+        min-height: 32px; /* Touch target için minimum yükseklik */
+        min-width: 44px; /* Touch target için minimum genişlik */
+    }
+    
+    .navbar {
+        padding: 15px;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 10;
+    }
+    
+    .logo img {
+        width: 100px;
+    }
+    
+    /* Arama çubuğunun üstte kalmasını sağla */
+    .search-bar {
+        order: 2;
+        margin: 10px 0;
+    }
+    
+    .logo {
+        order: 1;
+    }
+    
+    .menu-icon {
+        order: 3;
     }
 }

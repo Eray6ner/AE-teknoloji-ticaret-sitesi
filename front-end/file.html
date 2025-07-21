@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF8">
-  <meta name="viewport" content="width=device-width, initial-scale=0.1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 ">
   <title>AE Teknloji Site Tasarımı</title>
   <link rel="stylesheet" href="style.css"> 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,13 +24,12 @@
             <div class="logo">
                 <img src="images/logo.png" width="125px">
             </div>
-            <form>
-                <div class="search-bar">
-                    <span class="material-symbols-outlined">search</span>
-                    <input class="search-bar-input" type="search" placeholder="Ürün, kategori veya marka ara...">
-                    <button type="submit">Ara</button>
-                </div>
+            <form class="search-bar">
+                <span class="material-symbols-outlined">search</span>
+                <input class="search-bar-input" type="search" placeholder="Ürün, kategori veya marka ara...">
+                <button type="submit">Ara</button>
             </form>
+            <div id="search-results"></div>
            <nav>
                 <ul id="MenuItems">
                  <li><a href="file.html">Ana Sayfa</a> </li>
@@ -41,7 +40,7 @@
                 </ul>
             </nav>
             <div class="language-selector">
-                <select id="languageSelect" onchange="changeLanguage()">
+                <select id="languageSelect">
                     <option value="tr">Türkçe</option>
                     <option value="en">English</option>
                 </select>
@@ -52,9 +51,9 @@
         <div>
             <div class="row">
               <div class="col-2">  
-                  <h1>Yeni Seri Beybladeler İle Heyecanı Doruklarda Yaşa <br>Yakında Burada </h1>
-                  <p>Metalin Ruhunu Hisset!</p> 
-                  <a href="" class="button">Şimdi Keşfet &#8594;</a>         
+                  <h1 id="main-headline">Yeni Seri Beybladeler İle Heyecanı Doruklarda Yaşa <br><span id="main-headline2">Yakında Burada</span></h1>
+                  <p id="main-slogan">Metalin Ruhunu Hisset!</p> 
+                  <a href="" class="button" id="discover-now-btn">Şimdi Keşfet &#8594;</a>         
               </div>
              <div class="col-2">
                  <img src="images/baner.jpg" >
@@ -102,7 +101,7 @@
 
 <!--Featured Products-->
 <div class="small-container"></div>
-  <h2 class="title">Öne Çıkarılan Ürünler</h2>
+  <h2 class="title" id="featured-products-title">Öne Çıkarılan Ürünler</h2>
 <div class="row">
      <div class="col-4">
         <img src="images/ürün-1.jpg">
@@ -131,7 +130,7 @@
         <p>650 tl</p>
      </div>
 </div>
-<h2 class="title">Son Eklenen Ürünler</h2>
+<h2 class="title" id="latest-products-title">Son Eklenen Ürünler</h2>
 <div class="row">
     <div class="col-4">
         <img src="images/ürün-1.jpg">
@@ -177,5 +176,21 @@
     }
   </script>
   <script src="script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var langSelect = document.getElementById('languageSelect');
+  if (langSelect) {
+    langSelect.addEventListener('change', window.changeLanguage);
+  }
+});
+</script>
+<script>
+document.querySelector('.search-bar').onsubmit = function(e) {
+    e.preventDefault();
+    const query = document.querySelector('.search-bar-input').value.trim();
+    if (!query) return;
+    window.location.href = `arama-sonuclari.html?q=${encodeURIComponent(query)}`;
+};
+</script>
 </body>
 </html>

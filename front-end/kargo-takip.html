@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF8">
-  <meta name="viewport" content="width=device-width, initial-scale=0.1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kargo Takip - AE Teknoloji</title>
   <link rel="stylesheet" href="style.css"> 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,12 +17,10 @@
                 <div class="logo">
                     <img src="images/logo.png" width="125px">
                 </div>
-                <form>
-                    <div class="search-bar">
-                        <span class="material-symbols-outlined">search</span>
-                        <input class="search-bar-input" type="search" placeholder="Ürün, kategori veya marka ara...">
-                        <button type="submit">Ara</button>
-                    </div>
+                <form class="search-bar">
+                    <span class="material-symbols-outlined">search</span>
+                    <input class="search-bar-input" type="search" placeholder="Ürün, kategori veya marka ara...">
+                    <button type="submit">Ara</button>
                 </form>
                <nav>
                     <ul id="MenuItems">
@@ -30,10 +28,11 @@
                      <li><a href="ürünler.html">Ürün</a> </li>
                      <li><a href="favoriler.html">Favori</a> </li>
                      <li><a href="kayıt.html">Hesap</a> </li>
+                     <li><a href="kargo-takip.html">Kargo Takip</a> </li>
                     </ul>
                 </nav>
                 <div class="language-selector">
-                    <select id="languageSelect" onchange="changeLanguage()">
+                    <select id="languageSelect">
                         <option value="tr">Türkçe</option>
                         <option value="en">English</option>
                     </select>
@@ -47,14 +46,18 @@
     <!-- Kargo Takip Bölümü -->
     <div class="tracking-container">
         <div class="tracking-box">
-            <h2>Kargo Takip</h2>
-            <div class="tracking-form">
-                <div class="input-group">
-                    <span class="material-symbols-outlined">Kargo Takip Kodu</span>
-                    <input type="text" id="tracking-number" placeholder="Kargo takip numaranızı giriniz">
-                    <button onclick="trackShipment()" class="track-button">Sorgula</button>
+            <h2 style="text-align: center; color: #333; margin-bottom: 30px; font-size: 28px; font-weight: 600;">Kargo Takip</h2>
+            <form id="tracking-form" style="margin: 30px 0; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;">
+                <div style="position: relative; display: flex; align-items: center;">
+                    <span style="position: absolute; left: 15px; color: #666; font-size: 18px;">📦</span>
+                    <input id="tracking-number" type="text" placeholder="Takip numarası girin" 
+                           style="padding: 15px 15px 15px 45px; width: 300px; border: 2px solid #e0e0e0; border-radius: 25px; font-size: 16px; outline: none; transition: all 0.3s ease; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                 </div>
-            </div>
+                <button type="submit" style="padding: 15px 30px; background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255,107,107,0.3); text-transform: uppercase; letter-spacing: 1px;">
+                    🔍 Sorgula
+                </button>
+            </form>
+            <div id="tracking-result"></div>
 
             <!-- Kargo Durumu -->
             <div id="tracking-result" style="display: none;">
@@ -107,15 +110,99 @@
             }
         }
 
-        function trackShipment() {
-            var trackingNumber = document.getElementById("tracking-number").value;
-            if (trackingNumber.trim() !== "") {
-                document.getElementById("tracking-result").style.display = "block";
-            } else {
-                alert("Lütfen kargo takip numarası giriniz.");
-            }
-        }
+        document.querySelector('.search-bar').onsubmit = function(e) {
+            e.preventDefault();
+            const query = document.querySelector('.search-bar-input').value.trim();
+            if (!query) return;
+            window.location.href = `arama-sonuclari.html?q=${encodeURIComponent(query)}`;
+        };
+
+        // Kargo takip input ve buton için hover ve focus efektleri
+        document.addEventListener('DOMContentLoaded', function() {
+            const trackingInput = document.getElementById('tracking-number');
+            const trackingButton = document.querySelector('#tracking-form button');
+
+            // Input focus efekti
+            trackingInput.addEventListener('focus', function() {
+                this.style.borderColor = '#ff6b6b';
+                this.style.boxShadow = '0 2px 20px rgba(255,107,107,0.2)';
+                this.style.transform = 'scale(1.02)';
+            });
+
+            trackingInput.addEventListener('blur', function() {
+                this.style.borderColor = '#e0e0e0';
+                this.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+                this.style.transform = 'scale(1)';
+            });
+
+            // Buton hover efekti
+            trackingButton.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px) scale(1.05)';
+                this.style.boxShadow = '0 6px 20px rgba(255,107,107,0.4)';
+            });
+
+            trackingButton.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.boxShadow = '0 4px 15px rgba(255,107,107,0.3)';
+            });
+
+            // Input hover efekti
+            trackingInput.addEventListener('mouseenter', function() {
+                if (document.activeElement !== this) {
+                    this.style.borderColor = '#ff6b6b';
+                    this.style.boxShadow = '0 2px 15px rgba(255,107,107,0.15)';
+                }
+            });
+
+            trackingInput.addEventListener('mouseleave', function() {
+                if (document.activeElement !== this) {
+                    this.style.borderColor = '#e0e0e0';
+                    this.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+                }
+            });
+        });
     </script>
     <script src="script.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Dil seçici event listener
+  var langSelect = document.getElementById('languageSelect');
+  if (langSelect) {
+    langSelect.addEventListener('change', function() {
+      if (window.changeLanguage) {
+        window.changeLanguage();
+      }
+    });
+    
+    // Sayfa yüklendiğinde mevcut dili ayarla
+    const savedLanguage = localStorage.getItem('language') || 'tr';
+    langSelect.value = savedLanguage;
+    if (window.updatePageContent) {
+      window.updatePageContent(savedLanguage);
+    }
+  }
+});
+
+document.getElementById('tracking-form').onsubmit = async function(e) {
+  e.preventDefault();
+  const trackingNumber = document.getElementById('tracking-number').value.trim();
+  if (!trackingNumber) return;
+  const res = await fetch(`http://localhost:3001/api/shipments/${trackingNumber}`);
+  const data = await res.json();
+  const resultDiv = document.getElementById('tracking-result');
+  if (res.status === 404) {
+    resultDiv.innerHTML = '<div style="color:red;">Kargo bulunamadı.</div>';
+  } else {
+    resultDiv.innerHTML = `
+      <strong>Durum:</strong> ${data.status}<br>
+      <strong>Son Güncelleme:</strong> ${new Date(data.lastUpdate).toLocaleString()}<br>
+      <strong>Geçmiş:</strong>
+      <ul>
+        ${data.history.map(h => `<li>${new Date(h.date).toLocaleString()} - ${h.status} (${h.location})</li>`).join('')}
+      </ul>
+    `;
+  }
+};
+</script>
 </body>
 </html>

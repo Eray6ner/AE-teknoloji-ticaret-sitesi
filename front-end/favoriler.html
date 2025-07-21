@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Favorilerim - AE Teknoloji</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,12 +18,10 @@
                 <div class="logo">
                     <img src="images/logo.png" width="125px">
                 </div>
-                <form>
-                    <div class="search-bar">
-                        <span class="material-symbols-outlined">search</span>
-                        <input class="search-bar-input" type="search" placeholder="Ürün, kategori veya marka ara...">
-                        <button type="submit">Ara</button>
-                    </div>
+                <form class="search-bar">
+                    <span class="material-symbols-outlined">search</span>
+                    <input class="search-bar-input" type="search" placeholder="Ürün, kategori veya marka ara...">
+                    <button type="submit">Ara</button>
                 </form>
                <nav>
                     <ul id="MenuItems">
@@ -31,10 +29,11 @@
                      <li><a href="ürünler.html">Ürün</a> </li>
                      <li><a href="favoriler.html">Favori</a> </li>
                      <li><a href="kayıt.html">Hesap</a> </li>
+                     <li><a href="kargo-takip.html">Kargo Takip</a> </li>
                     </ul>
                 </nav>
                 <div class="language-selector">
-                    <select id="languageSelect" onchange="changeLanguage()">
+                    <select id="languageSelect">
                         <option value="tr">Türkçe</option>
                         <option value="en">English</option>
                     </select>
@@ -47,47 +46,15 @@
 
     <!-- Favoriler Başlık -->
     <div class="small-container">
-        <div class="row row-2">
-            <h2>Favori Ürünlerim</h2>
-        </div>
-
-        <!-- Favori Ürünler Listesi -->
-        <div class="row">
-            <div class="col-4">
-                <img src="images/ürün-1.jpg">
-                <h4>Beyblade Burst Greatest Raphael</h4>
-                <p>650 TL</p>
-                <div class="product-actions">
-                    <button class="remove-favorite">Favorilerden Çıkar</button>
-                    <button class="add-to-cart">Sepete Ekle</button>
-                </div>
-            </div>
-
-            <div class="col-4">
-                <img src="images/ürün-2.jpg">
-                <h4>Beyblade Burst Greatest Raphael</h4>
-                <p>650 TL</p>
-                <div class="product-actions">
-                    <button class="remove-favorite">Favorilerden Çıkar</button>
-                    <button class="add-to-cart">Sepete Ekle</button>
-                </div>
-            </div>
-
-            <div class="col-4">
-                <img src="images/ürün-3.jpg">
-                <h4>Beyblade Burst Greatest Raphael</h4>
-                <p>650 TL</p>
-                <div class="product-actions">
-                    <button class="remove-favorite">Favorilerden Çıkar</button>
-                    <button class="add-to-cart">Sepete Ekle</button>
-                </div>
-            </div>
+        <h2 class="title" id="favorites-title">Favori Ürünlerim</h2>
+        <div id="favorites-list">
+          <!-- Favori ürünler buraya dinamik olarak eklenecek -->
         </div>
 
         <!-- Boş Favoriler Mesajı -->
         <div class="empty-favorites" style="display: none;">
-            <h3>Henüz favori ürününüz bulunmuyor</h3>
-            <p>Ürünleri keşfetmek için <a href="ürünler.html">ürünler sayfasını</a> ziyaret edebilirsiniz.</p>
+            <h3 id="favorites-empty-title">Henüz favori ürününüz bulunmuyor</h3>
+            <p id="favorites-empty-desc">Ürünleri keşfetmek için <a href="ürünler.html" id="favorites-empty-link">ürünler sayfasını</a> ziyaret edebilirsiniz.</p>
         </div>
     </div>
 
@@ -103,7 +70,7 @@
             }
         }
 
-        const BASE_URL = 'https://ae-teknoloji-ticaret-sitesi.onrender.com/api';
+        
         // Favori ürünleri dinamik olarak çek ve göster
         async function loadFavorites() {
             const token = localStorage.getItem('token');
@@ -133,8 +100,8 @@
                     <h4>${product.name}</h4>
                     <p>${product.price} TL</p>
                     <div class="product-actions">
-                        <button class="remove-favorite">Favorilerden Çıkar</button>
-                        <button class="add-to-cart">Sepete Ekle</button>
+                        <button class="remove-favorite" id="remove-favorite-btn">Favorilerden Çıkar</button>
+                        <button class="add-to-cart" id="add-to-cart-btn">Sepete Ekle</button>
                     </div>
                 `;
                 // Favoriden çıkarma
@@ -166,6 +133,137 @@
         }
         window.addEventListener('DOMContentLoaded', loadFavorites);
     </script>
+    <script>
+document.querySelector('.search-bar').onsubmit = function(e) {
+    e.preventDefault();
+    const query = document.querySelector('.search-bar-input').value.trim();
+    if (!query) return;
+    window.location.href = `arama-sonuclari.html?q=${encodeURIComponent(query)}`;
+};
+</script>
+    <script>
+// Kullanıcı giriş yaptıysa token localStorage'da olmalı
+const token = localStorage.getItem('token');
+
+if (token) {
+  fetch('http://localhost:3001/api/favorites', {
+    headers: {
+      'Authorization': 'Bearer ' + token
+    }
+  })
+  .then(res => res.json())
+  .then(products => {
+    const favoriteList = document.getElementById('favorites-list');
+    favoriteList.innerHTML = '';
+    if (products.length === 0) {
+      favoriteList.innerHTML = '<p>Henüz favori ürününüz bulunmuyor<br>Ürünleri keşfetmek için <a href="ürünler.html">ürünler</a> sayfasını ziyaret edebilirsiniz.</p>';
+      return;
+    }
+    products.forEach((product, index) => {
+      // Her 4 üründe bir yeni satır başlat
+      if (index % 4 === 0) {
+        const row = document.createElement('div');
+        row.className = 'row-2';
+        row.id = `row-${Math.floor(index / 4)}`;
+        favoriteList.appendChild(row);
+      }
+      
+      const div = document.createElement('div');
+      div.className = 'col-4';
+      div.innerHTML = `
+        <a href="ürün-detayları.html?id=${product._id}">
+          <img src="${product.imageUrl}" alt="${product.name}">
+          <h4>${product.name}</h4>
+          <p>${product.price} TL</p>
+          <span style="font-size:13px;color:#888;">${product.series}</span>
+        </a>
+        <div class="product-actions">
+          <button class="remove-favorite" onclick="removeFromFavorites('${product._id}')">Favorilerden Kaldır</button>
+          <button class="add-to-cart" onclick="addToCart('${product._id}')">Sepete Ekle</button>
+        </div>
+      `;
+      
+      // Ürünü son satıra ekle
+      const currentRow = favoriteList.querySelector(`#row-${Math.floor(index / 4)}`);
+      currentRow.appendChild(div);
+    });
+  })
+  .catch(() => {
+    document.getElementById('favorites-list').innerHTML = '<p style="text-align:center;">Henüz favori ürününüz bulunmuyor<br>Ürünleri keşfetmek için <a href="ürünler.html" style="color:#ff9800;">ürünler</a> sayfasını ziyaret edebilirsiniz.</p>';
+  });
+} else {
+  document.getElementById('favorites-list').innerHTML = '<p>Favori ürünleri görmek için giriş yapmalısınız.</p>';
+}
+
+// Favorilerden kaldır fonksiyonu
+function removeFromFavorites(productId) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('Bu işlem için giriş yapmalısınız!');
+    return;
+  }
+  
+  fetch('http://localhost:3001/api/favorites/remove', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify({ productId })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert('Ürün favorilerden kaldırıldı!');
+    // Sayfayı yenile
+    location.reload();
+  })
+  .catch(err => {
+    alert('Bir hata oluştu!');
+  });
+}
+
+// Sepete ekle fonksiyonu
+function addToCart(productId) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('Bu işlem için giriş yapmalısınız!');
+    return;
+  }
+  
+  fetch('http://localhost:3001/api/cart/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify({ productId, quantity: 1 })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert('Ürün sepete eklendi!');
+  })
+  .catch(err => {
+    alert('Bir hata oluştu!');
+  });
+}
+    </script>
+    <script>
+// Sayfa yüklendiğinde kaydedilmiş dili uygula ve select'i güncelle
+window.addEventListener('DOMContentLoaded', function() {
+  var savedLanguage = localStorage.getItem('language') || 'tr';
+  var langSelect = document.getElementById('languageSelect');
+  if (langSelect) langSelect.value = savedLanguage;
+  if (typeof updatePageContent === 'function') updatePageContent(savedLanguage);
+});
+</script>
     <script src="script.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  var langSelect = document.getElementById('languageSelect');
+  if (langSelect) {
+    langSelect.addEventListener('change', window.changeLanguage);
+  }
+});
+</script>
 </body>
 </html>

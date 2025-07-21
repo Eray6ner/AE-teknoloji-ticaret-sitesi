@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF8">
-  <meta name="viewport" content="width=device-width, initial-scale=0.1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AE Teknloji Site Tasarımı</title>
   <link rel="stylesheet" href="style.css"> 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,12 +18,10 @@
             <div class="logo">
                 <img src="images/logo.png" width="125px">
             </div>
-            <form>
-                <div class="search-bar">
-                    <span class="material-symbols-outlined">search</span>
-                    <input class="search-bar-input" type="search" placeholder="Ürün, kategori veya marka ara...">
-                    <button type="submit">Ara</button>
-                </div>
+            <form class="search-bar">
+                <span class="material-symbols-outlined">search</span>
+                <input class="search-bar-input" type="search" placeholder="Ürün, kategori veya marka ara...">
+                <button type="submit">Ara</button>
             </form>
            <nav>
                 <ul id="MenuItems">
@@ -34,7 +32,7 @@
                 </ul>
             </nav>
             <div class="language-selector">
-                <select id="languageSelect" onchange="changeLanguage()">
+                <select id="languageSelect">
                     <option value="tr">Türkçe</option>
                     <option value="en">English</option>
                 </select>
@@ -59,7 +57,7 @@
                         <hr id="Indicator">
                     </div>
                     <form id="LoginForm">
-                       <input type="text" placeholder="Username">
+                       <input type="text" placeholder="Kullanıcı Adı">
                        <input type="password" placeholder="Password">  
                        <button type="submit"class="button">Giriş Yap</button>
                        <a href="">Şifremi Unuttum</a>
@@ -114,35 +112,36 @@
         const name = RegForm.querySelector('input[type="text"]').value;
         const email = RegForm.querySelector('input[type="email"]').value;
         const password = RegForm.querySelector('input[type="password"]').value;
-        const BASE_URL = 'https://ae-teknoloji-ticaret-sitesi.onrender.com/api';
+        const BASE_URL = 'http://localhost:3001/api';
         const res = await fetch(`${BASE_URL}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password })
         });
         const data = await res.json();
-        alert(data.message);
+        alert(data.message + (data.error ? ('\nHata: ' + data.error + '\nStack: ' + (data.stack || '')) : ''));
     };
 
     // Giriş formu submit
     LoginForm.onsubmit = async function(e) {
         e.preventDefault();
-        const emailOrUsername = LoginForm.querySelector('input[type="text"]').value;
+        const name = LoginForm.querySelector('input[type="text"]').value;
         const password = LoginForm.querySelector('input[type="password"]').value;
-        const BASE_URL = 'https://ae-teknoloji-ticaret-sitesi.onrender.com/api';
-        // Username veya email ile giriş denemesi (örnek: email olarak kabul ediyoruz)
+        const BASE_URL = 'http://localhost:3001/api';
         const res = await fetch(`${BASE_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: emailOrUsername, password })
+            body: JSON.stringify({ name, password })
         });
         const data = await res.json();
         if (res.ok) {
-            alert('Giriş başarılı! Token: ' + data.token);
-            // İsterseniz token'ı localStorage'a kaydedebilirsiniz
-            // localStorage.setItem('token', data.token);
+            // Token'ı localStorage'a kaydet
+            localStorage.setItem('token', data.token);
+            // Başarılı girişte yönlendir
+            window.location.href = 'file.html';
         } else {
-            alert(data.message);
+            // Hatalıysa uyarı ver
+            alert(data.message + (data.error ? ('\nHata: ' + data.error + '\nStack: ' + (data.stack || '')) : ''));
         }
     };
 
@@ -151,7 +150,7 @@
         e.preventDefault();
         const email = prompt('Şifrenizi sıfırlamak için e-posta adresinizi girin:');
         if (!email) return;
-        const BASE_URL = 'https://ae-teknoloji-ticaret-sitesi.onrender.com/api';
+        const BASE_URL = 'http://localhost:3001/api';
         const res = await fetch(`${BASE_URL}/auth/forgot-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -162,9 +161,25 @@
             alert('Şifre sıfırlama bağlantısı e-posta ile gönderildi (simülasyon). Token: ' + data.token);
             // Gerçek uygulamada kullanıcıya e-posta gönderilir
         } else {
-            alert(data.message);
+            alert(data.message + (data.error ? ('\nHata: ' + data.error + '\nStack: ' + (data.stack || '')) : ''));
         }
     };
 </script>
+<script>
+document.querySelector('.search-bar').onsubmit = function(e) {
+    e.preventDefault();
+    const query = document.querySelector('.search-bar-input').value.trim();
+    if (!query) return;
+    window.location.href = `arama-sonuclari.html?q=${encodeURIComponent(query)}`;
+};
+</script>
 <script src="script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var langSelect = document.getElementById('languageSelect');
+  if (langSelect) {
+    langSelect.addEventListener('change', window.changeLanguage);
+  }
+});
+</script>
  </body
